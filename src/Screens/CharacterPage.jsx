@@ -9,7 +9,7 @@ function CharacterPage({data}) {
 
     useEffect(()=>{
 
-        // filtering the relevant character data by the name
+        // filtering the relevant character data by its name
         let characterDetails = data.filter(x=>x.name === name)[0]
 
         let temp = [];
