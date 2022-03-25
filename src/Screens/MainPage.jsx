@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 function MainPage({data}) {
-    const [seasonsContainer, setSeasonsContainer] = useState([]);
+    const [seasonsEpisodes, setSeasonsEpisodes] = useState([]);
 
     useEffect(()=>{
 
@@ -16,38 +16,19 @@ function MainPage({data}) {
             M.Collapsible.init(elems, []);
         });
 
-          if (data){
-              showList();
-          }
-    },[])
-
-    const showList = () =>{
         let seasonsArray = getSeasonsFromJson(data);
         let content = []
-
+    
         seasonsArray.forEach(season => {
-
-            // filtering the current episode data
+    
             let listOfEpisodes = data.filter(elem => elem.season === season && elem.series === "Breaking Bad")
-            content.push(
-                <li key={season}>
-                    <div className="collapsible-header">Season {season}</div>
-                    <div className="collapsible-body">
-                        <div className="collection">
-                            {listOfEpisodes.map(x=>
-                                <Link key={`${x.season} - ${x.episode}`} className="collection-item" to={{pathname :`/Episodes/${x.season}-${x.episode}`}} state={{ obj: x}}
-                                >
-                                    Episode {x.episode} - {x.title} - {x.air_date}
-                                </Link>
-                            )}
-                        </div>
-                    </div>
-                </li>
-            )
+            content.push({
+                season : season,
+                episodes : listOfEpisodes
+            })
+            setSeasonsEpisodes(content);
         });
-
-        setSeasonsContainer(content)
-    }
+    },[data])
 
 
     // getting the seasons from fetched data
@@ -62,11 +43,26 @@ function MainPage({data}) {
         return seasons;
     }
 
-
     return (
         <div>
             <ul className="collapsible">
-                {seasonsContainer}
+                {seasonsEpisodes.map(elem =>{
+                    return (
+                    <li key={elem.season}>
+                    <div className="collapsible-header">Season {elem.season}</div>
+                    <div className="collapsible-body">
+                        <div className="collection">
+                            {elem.episodes.map(x=>
+                                <Link key={`${x.season} - ${x.episode}`} className="collection-item" 
+                                    to={`/Episodes/${x.season}-${x.episode}`}
+                                >
+                                    Episode {x.episode} - {x.title} - {x.air_date}
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                </li>)
+                })}
             </ul>
         </div>
     );
