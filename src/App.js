@@ -5,7 +5,7 @@ import Loader from "./Screens/Loader";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [episodes, setEpidosdes] = useState(null);
+  const [episodes, setEpisodes] = useState(null);
   const [characters, setCharacters] = useState(null);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ function App() {
     fetch("https://www.breakingbadapi.com/api/episodes")
       .then((response) => response.json())
       .then((data) => {
-        setEpidosdes(data);
+        setEpisodes(data);
       });
 
     // fetching characters data and init the charcters
@@ -25,6 +25,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // presenting the data after finishing loading
     if (episodes && characters) {
       setIsLoading(false);
     }
